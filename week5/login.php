@@ -73,9 +73,27 @@
                                 <input type="password" name="password" class="form-control" required>
                             </label>
                         </div>
+                        <div class="form-group">
+                            <label>StudentID</label>
+                            <label>
+                                <input type="text" name="studentid" class="form-control" required>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Class</label>
+                            <label>
+                                <input type="text" name="class" class="form-control" required>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <label>
+                                <input type="text" name="country" class="form-control" required>
+                            </label>
+                        </div>
                         <button type="submit" class="btn btn-primary">Register</button>
                     </form>
-
+            
                 </div>
 
             </div>
