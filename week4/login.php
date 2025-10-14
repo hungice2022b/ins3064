@@ -1,5 +1,6 @@
 <?php
 include("db_connect.php");
+ 
 if (isset($_POST['register'])) {
     $username = $_POST['username'];
     $password = md5($_POST['password']);
@@ -18,7 +19,6 @@ if (isset($_POST['register'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
