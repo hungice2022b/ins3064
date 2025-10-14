@@ -1,20 +1,20 @@
 <?php
  include("db_connect.php");
 
- if (isset($ POST['login'])) {
+ if (isset($_POST['login'])) {
 
-   $usernane = $_POST[ 'usernane'];
+   $username = $_POST['username'];
 
-   $password = mđ5($_POST[ 'passuord' ]);
-
-
-
-  $query = "SELECT FROM users MHERE usernane='$username' AND password='$password";
-  $result = mysqli_ query($1ink, $query);
+   $password = md5($_POST[ 'password' ]);
 
 
 
-  if (mysqli_num rows(§result) == 1) {
+  $query = " SELECT * FROM users WHERE username='$username' AND password='$password'";
+  $result = mysqli_query($link, $query);
+
+
+
+  if (mysqli_num_rows($result) == 1) {
      echo("Login successful!");
   } else {
      echo "Wrong infor";
