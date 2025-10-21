@@ -3,7 +3,7 @@ session_start();
 
 /* connect to database check user*/
 $con=mysqli_connect('localhost','root');
-mysqli_select_db($con,LoginReg);
+mysqli_select_db($con,"LoginReg");
 
 /* create variables to store data */
 $name =$_POST['user'];
