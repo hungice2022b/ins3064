@@ -1,79 +1,74 @@
 <?php
-  if (!empty($_GET['q'])) {
-    switch ($_GET['q']) {
-      case 'info':
-        phpinfo(); 
-        exit;
-      break;
+session_start();
+
+// ⭐ Nếu chưa có session thì kiểm tra cookie để auto login
+if (!isset($_SESSION['user'])) {
+    if (isset($_COOKIE['logged_user'])) {
+        $_SESSION['user'] = $_COOKIE['logged_user'];
+    } else {
+        header("Location: login.php");
+        exit();
     }
-  }
+}
+
+require_once 'config.php';
+
+// Lấy danh sách người hiến máu
+$stmt = $pdo->query("SELECT * FROM donors");
+$donors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (!$donors) $donors = [];
 ?>
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Laragon</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-        <link href="https://fonts.googleapis.com/css?family=Karla:400" rel="stylesheet" type="text/css">
+<body>
+    <header>
+        <h1>Donor Management</h1>
 
-        <style>
-            html, body {
-                height: 100%;
-            }
+        <button onclick="window.location.href='add_donor.php'">+ Add Donor</button>
 
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: 'Karla';
-            }
+        <a href="logout.php" class="logout-btn">Logout</a>
+    </header>
 
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Blood Type</th>
+                <th>Phone Number</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
 
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
-            }
-
-            .opt {
-                margin-top: 30px;
-            }
-
-            .opt a {
-              text-decoration: none;
-              font-size: 150%;
-            }
-            
-            a:hover {
-              color: red;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title" title="Laragon">Laragon</div>
-     
-                <div class="info"><br />
-                      <?php print($_SERVER['SERVER_SOFTWARE']); ?><br />
-                      PHP version: <?php print phpversion(); ?>   <span><a title="phpinfo()" href="/?q=info">info</a></span><br />
-                      Document Root: <?php print ($_SERVER['DOCUMENT_ROOT']); ?><br />
-
-                </div>
-                <div class="opt">
-                  <div><a title="Getting Started" href="https://laragon.org/docs">Getting Started</a></div>
-                </div>
-            </div>
-
-        </div>
-    </body>
+        <tbody>
+            <?php if (empty($donors)): ?>
+                <tr><td colspan="7">No donor data available.</td></tr>
+            <?php else: ?>
+                <?php foreach ($donors as $index => $donor): ?>
+                    <tr>
+                        <td><?= $index + 1 ?></td>
+                        <td><?= htmlspecialchars($donor['code']) ?></td>
+                        <td><?= htmlspecialchars($donor['name']) ?></td>
+                        <td><?= htmlspecialchars($donor['blood_type']) ?></td>
+                        <td><?= htmlspecialchars($donor['phone_number']) ?></td>
+                        <td><?= htmlspecialchars($donor['status']) ?></td>
+                        <td>
+                            <a href="edit_donor.php?id=<?= $donor['id'] ?>">Edit</a> |
+                            <a href="delete_donor.php?id=<?= $donor['id'] ?>" onclick="return confirm('Are you sure to delete this donor?')">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</body>
 </html>
